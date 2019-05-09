@@ -1,0 +1,85 @@
+select * from emp_info
+select *from emp_office
+select *from department
+select * from branch
+
+
+update emp_info 
+set emp_id='1a717a'
+where emp_name='Moin' 
+
+
+
+subquery:
+
+
+select * from emp_office
+where emp_id in(select emp_id
+                from emp_info
+                   where emp_name='Zia')
+
+joining+subquery:
+
+
+select e.emp_id,b.emp_name,e.deptno,e.sal,e.comm,e.sal+nvl(comm,0) as Total_salary
+from emp_info b,emp_office e
+where e.emp_id  in (select emp_id 
+                         from emp_office
+                            where nvl(comm,0)<>0)
+and e.emp_id=b.emp_id
+
+
+subquery:
+
+select emp_id, emp_name
+from emp_info 
+where emp_id in(select emp_id 
+                 from emp_office
+                      where sal in(select min(sal)
+                                                from emp_office))
+                                                
+
+subquery:
+
+select emp_id,emp_name
+from emp_info
+where emp_id in(select emp_id
+                 from emp_office
+                  where to_char(hiredate,'yyyy')>2013)
+
+
+subquery:
+
+select branch_name
+from branch
+where branch_no in(select branch_no
+                 from emp_office
+                   group by branch_no
+                    having sum(sal+nvl(comm,0))in (select max(sum(sal+nvl(comm,0)))
+                                                     from emp_office
+                                                         group by branch_no))
+
+
+
+joining:
+select a.deptno,a.emp_id,b.emp_name,c.branch_name,c.branch_add
+from emp_office a, emp_info b,branch c
+where a.deptno like '323%'
+and a.emp_id=b.emp_id
+and a.branch_no=c.branch_no
+
+joining:
+select a.deptno,a.emp_id,b.emp_name
+from emp_office a, emp_info b, branch c
+where c.branch_name='Uttara-1'
+and c.branch_no=a.branch_no
+and a.emp_id=b.emp_id
+
+
+
+joining:
+select b.deptno,a.emp_id,a.emp_name,a.address
+from emp_info a, emp_office b, branch c
+where c.branch_officer='Tawhidul Alam'
+and c.branch_no=b.branch_no
+and a.emp_id=b.emp_id

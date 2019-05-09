@@ -1,0 +1,34 @@
+
+
+
+ view creation:
+create view branch_salary
+                  (branch_name,minimum_salary, maximum_salary, average_salary,total_salary)  
+as select b.branch_name,min(a.sal+nvl(a.comm,0)),max(a.sal+nvl(a.comm,0)),round(avg(a.sal+nvl(a.comm,0)),3),sum(a.sal+nvl(a.comm,0))
+from emp_office a, branch b
+where a.branch_no=b.branch_no
+group by b.branch_name
+
+view creation(complex):
+create view department_salary
+                    (Department_name,minimum_salary, maximum_salary, average_salary,total_salary)
+as select b.dept_name,min(a.sal+nvl(a.comm,0)),max(a.sal+nvl(a.comm,0)),round(avg(a.sal+nvl(a.comm,0)),3),sum(a.sal+nvl(a.comm,0))
+from emp_office a, department b
+where a.deptno=b.deptno
+group by b.dept_name
+
+view(normal):
+create view emp_salary
+               (employee_id,employee_name,salary)
+as select  a.emp_id,a.emp_name,b.sal
+from emp_info a, emp_office b
+where a.emp_id=b.emp_id
+
+view(normal):
+create view  employee717
+                (employee_id,emploee_name,hiredate)
+as select    a.emp_id,a.emp_name,b.hiredate
+from   emp_info a, emp_office b
+where b.deptno='717g'
+and a.emp_id=b.emp_id
+with read only
